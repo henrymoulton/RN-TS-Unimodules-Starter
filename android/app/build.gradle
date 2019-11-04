@@ -181,7 +181,6 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
-
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")
@@ -189,6 +188,10 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+    implementation 'androidx.appcompat:appcompat:1.1.0-rc01' // react-navigation / react-native-screens
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02' // react-navigation / react-native-screens
+    apply from: '../../node_modules/react-native-unimodules/gradle.groovy'
+    addUnimodulesDependencies()
 }
 
 // Run this once to be able to run the application with BUCK
