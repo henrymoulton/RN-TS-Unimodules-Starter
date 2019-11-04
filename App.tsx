@@ -1,117 +1,104 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
+import React, {Component, useEffect} from 'react';
+import * as LocalAuthentication from 'expo-local-authentication';
+import {Alert, Platform, Text, View} from 'react-native';
+import {AuthenticationType} from 'expo-local-authentication';
 
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+class RootComponent extends Component {
+  async componentDidMount() {
+    await this.handleAuth();
+  }
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  handleBiometricAuthFailure = async (error: string) => {
+    switch (error) {
+      case 'NOT_ENROLLED':
+        Alert.alert(
+          `Not Enrolled`,
+          'This device does not have biometric login enabled.',
+        );
+        break;
+      case 'NOT_PRESENT':
+        Alert.alert('', 'This device does not have the required hardware.');
+        return;
+      case 'AUTHENTICATION_FAILED':
+        Alert.alert('', 'Authentication failed too many times');
+        break;
+      case 'NOT_AVAILABLE':
+        Alert.alert('', 'Authentication is not available.');
+        break;
+      default:
+        Alert.alert(
+          'Unable to use Fingerprint or Face Authentication.',
+          `${error}`,
+        );
+    }
+  };
 
-const App = () => {
-  const usingHermes = typeof HermesInternal === 'object' && HermesInternal !== null;
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {!usingHermes ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
+  handleAndroidAfter = async () => {
+    await LocalAuthentication.cancelAuthenticate();
+  };
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
+  handleBiometricAuthSuccess = async () => {
+    Alert.alert('', 'Successfully authenticated');
+    if (Platform.OS === 'android') {
+      this.handleAndroidAfter();
+    }
+  };
+  authenticateBiometrics = async () => {
+    const authenticateResult = await LocalAuthentication.authenticateAsync({
+      promptMessage: 'Please authenticate to proceed',
+      fallbackLabel: 'Fallback label',
+    });
+    if (authenticateResult.success) {
+      this.handleBiometricAuthSuccess();
+    } else {
+      this.handleBiometricAuthFailure(authenticateResult.error);
+    }
+  };
 
-export default App;
+  handleAndroidBefore = async () => {
+    const supportedTypesResult = await LocalAuthentication.supportedAuthenticationTypesAsync();
+    const showAndroidFingerprintAlert = supportedTypesResult.includes(
+      AuthenticationType.FINGERPRINT,
+    );
+    if (showAndroidFingerprintAlert) {
+      Alert.alert(
+        'Fingerprint Scan',
+        'Place your finger over the touch sensor.',
+        [],
+        {},
+      );
+    }
+  };
+
+  handleEnrolledBiometricDevice = async () => {
+    if (Platform.OS === 'android') {
+      this.handleAndroidBefore();
+    }
+    this.authenticateBiometrics();
+  };
+
+  handleAuth = async () => {
+    try {
+      const isEnrolledResult = await LocalAuthentication.isEnrolledAsync();
+      if (isEnrolledResult) {
+        await this.handleEnrolledBiometricDevice();
+      } else {
+        Alert.alert('Phone not able to use Face or Fingerprint.');
+      }
+    } catch (error) {
+      console.log(error);
+      Alert.alert(`Error`, error.message);
+      debugger;
+    }
+  };
+
+  render() {
+    return (
+      <View>
+        <Text>lol</Text>
+      </View>
+    );
+  }
+}
+
+export default RootComponent;

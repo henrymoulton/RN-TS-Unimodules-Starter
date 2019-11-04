@@ -8,6 +8,9 @@ PODS:
   - EXFileSystem (8.0.0-rc.0):
     - UMCore
     - UMFileSystemInterface
+  - EXLocalAuthentication (7.0.0):
+    - UMConstantsInterface
+    - UMCore
   - EXPermissions (8.0.0-rc.0):
     - UMCore
     - UMPermissionsInterface
@@ -249,6 +252,7 @@ DEPENDENCIES:
   - EXAppLoaderProvider (from `../node_modules/expo-app-loader-provider/ios`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
+  - EXLocalAuthentication (from `../node_modules/expo-local-authentication/ios`)
   - EXPermissions (from `../node_modules/expo-permissions/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
@@ -306,6 +310,9 @@ EXTERNAL SOURCES:
   EXFileSystem:
     :path: !ruby/object:Pathname
     path: "../node_modules/expo-file-system/ios"
+  EXLocalAuthentication:
+    :path: !ruby/object:Pathname
+    path: "../node_modules/expo-local-authentication/ios"
   EXPermissions:
     :path: !ruby/object:Pathname
     path: "../node_modules/expo-permissions/ios"
@@ -400,6 +407,7 @@ SPEC CHECKSUMS:
   EXAppLoaderProvider: 5d348813a9cf09b03bbe5b8b55437bc1bfbddbd1
   EXConstants: 372356a14e0c4610783252c077173370b1fb0b12
   EXFileSystem: 6ecb14b5c5557a5208d4474487d2eb1edef6892c
+  EXLocalAuthentication: 3cf0ceb240c45dab0a0951687b95204f41b52cc9
   EXPermissions: a8da2bebf970af22e4714cc24fc5fab124ee315c
   FBLazyVector: 5bc5b1606fc9a7ac6956de049f6e30901ed31c49
   FBReactNativeSpec: f7be9bcc5ce259f7c39509f3f4caf59020d11d4c

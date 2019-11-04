@@ -2489,6 +2489,13 @@ expo-file-system@~8.0.0-rc.0:
   dependencies:
     uuid-js "^0.7.5"
 
+expo-local-authentication@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/expo-local-authentication/-/expo-local-authentication-7.0.0.tgz#aca6b79e59e53ec3d44d4951203abb1a85d9f5c6"
+  integrity sha512-LTFMc8A7hm0Glgs6fSdkpHzrGH2EVqpUPdLQCyvMNwhQMncsh9Q13kzuNhrSjeBX+4M9c8HiH5OymETiC4GQYA==
+  dependencies:
+    invariant "^2.2.4"
+
 expo-permissions@~8.0.0-rc.0:
   version "8.0.0-rc.0"
   resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-8.0.0-rc.0.tgz#4fdd764ca62c8df7156e4523f6460401d7b00ae9"
