@@ -26,6 +26,9 @@
     "react-test-renderer": "16.9.0",
     "typescript": "^3.6.3"
   },
+  "resolutions": {
+    "@react-native-community/cli-platform-ios": "2.9.0"
+  },
   "jest": {
     "preset": "react-native",
     "moduleFileExtensions": [
